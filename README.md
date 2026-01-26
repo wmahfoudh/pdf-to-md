@@ -21,7 +21,7 @@ Since `markitdown` is available in the AUR, this is the most straightforward ins
 
 ```bash
 # Install system tools
-yay -S ocrmypdf tesseract tesseract-data-eng imagemagick zsh
+yay -S ocrmypdf tesseract tesseract-data-eng imagemagick
 
 # Install MarkItDown (AUR)
 yay -S python-markitdown
@@ -36,7 +36,7 @@ On Debian-based systems, you will install the system tools via `apt` and MarkItD
 ```bash
 # Install system tools
 sudo apt update
-sudo apt install ocrmypdf tesseract-ocr imagemagick zsh
+sudo apt install ocrmypdf tesseract-ocr imagemagick
 
 # Install language packs (example: Chinese Simplified)
 sudo apt install tesseract-ocr-chi-sim
@@ -49,7 +49,7 @@ pip install markitdown
 ### Fedora
 ```bash
 # Install system tools
-sudo dnf install ocrmypdf tesseract tesseract-langpack-chi_sim ImageMagick zsh
+sudo dnf install ocrmypdf tesseract tesseract-langpack-chi_sim ImageMagick
 
 # Install MarkItDown
 pip install markitdown
