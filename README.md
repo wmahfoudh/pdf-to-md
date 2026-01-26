@@ -9,7 +9,7 @@ It handles the entire extraction process: correcting image defects, performing O
 *   **Batch Processing:** Run without arguments to process every PDF and image in the current directory.
 *   **Intelligent OCR:** Uses `ocrmypdf` to add text layers to scanned documents.
 *   **Image Support:** Automatically converts JPG, PNG, and TIFF files to PDF, fixing common issues like missing DPI metadata or alpha channels (transparency) using ImageMagick.
-*   **Multi-Language Support:** Easy syntax to specify multiple languages for OCR (e.g., English + Simplified Chinese).
+*   **Multi-Language Support:** Easy syntax to specify [multiple languages](https://tesseract-ocr.github.io/tessdoc/Data-Files-in-different-versions.html) for OCR (e.g., English + Simplified Chinese).
 *   **"Nuclear" Force Mode:** A specific flag (`-f`) to handle files with corrupt text encoding (CID errors) or digital signatures by rasterizing the document before processing.
 
 ## Prerequisites
