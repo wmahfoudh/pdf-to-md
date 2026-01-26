@@ -14,7 +14,7 @@ It handles the entire extraction process: correcting image defects, performing O
 
 ## Prerequisites
 
-The script requires a ZSH shell and several underlying tools to function: `ocrmypdf`, `tesseract`, `imagemagick`, and `markitdown`.
+The script requires a shell and several underlying tools to function: `ocrmypdf`, `tesseract`, `imagemagick`, and `markitdown`.
 
 ### Arch Linux
 Since `markitdown` is available in the AUR, this is the most straightforward installation.
