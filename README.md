@@ -1,6 +1,6 @@
 # PDF to Markdown Batch Processor
 
-This script automates the pipeline of converting PDF documents and images into clean Markdown text. It is designed specifically for data preparation workflows where the end goal is feeding high-quality text into Large Language Models (LLMs) or indexing systems (RAG).
+This script automates the pipeline of converting PDF documents and images into clean Markdown text **fully offline**. It is designed specifically for data preparation workflows where the end goal is feeding high-quality text into Large Language Models (LLMs) or indexing systems (RAG).
 
 It handles the entire extraction process: correcting image defects, performing OCR (Optical Character Recognition) using Tesseract, and converting the layout into structured Markdown. It includes specific robust handling for corrupt text layers and digital signatures that often break standard extractors.
 
