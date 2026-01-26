@@ -4,8 +4,10 @@
 # Script Name: pdf-to-md.sh
 # Description: Automates OCR and Markdown extraction.
 #              Updates:
+#              - Auto-cleans destination files before run (fixes overwrite issues).
 #              - Auto-flattens images (removes alpha channel) using ImageMagick.
-#              - Auto-sets DPI to 300 for images.
+#              - FIXED: DPI flag placement to ensure high-quality rasterization.
+#              - INCREASED: Force Mode now uses 600 DPI for maximum clarity.
 #              - Forces processing of digital signatures.
 #              - Added -f / --force flag: "Nuclear Mode" to rasterize corrupt
 #                PDFs (fixes CID/garbage text errors) before OCR.
@@ -21,6 +23,7 @@
 DEFAULT_LANG="eng"
 OCR_DIR="ocr"
 MD_DIR="md"
+FORCE_DPI="600"  # High resolution for "Force Mode" to ensure clear text
 
 # --- Colors for Output ---
 GREEN='\033[0;32m'
@@ -69,7 +72,7 @@ process_file() {
     local extension="${input_file:e:l}" # Get extension in lowercase
     local ocr_output="${OCR_DIR}/${base_name}-ocr.pdf"
     local md_output="${MD_DIR}/${base_name}.md"
-    local temp_prep_pdf=""
+    local temp_prep_pdf="${OCR_DIR}/${base_name}_temp_prep.pdf"
     local file_to_ocr="$input_file"
 
     echo "${BLUE}Processing: ${input_file} (Lang: $lang)${NC}"
@@ -77,11 +80,11 @@ process_file() {
         echo "${RED}  [FORCE MODE ACTIVE]${NC}"
     fi
 
-    # --- Step 0: Pre-process (Sanitization) ---
-    # We create a temporary flattened PDF if:
-    # 1. The input is an IMAGE (to fix Alpha Channel/DPI errors).
-    # 2. The input is a PDF AND Force Mode is ON (to fix CID/Corrupt Text).
+    # --- Step -1: Cleanup Old Runs ---
+    # Blindly delete previous outputs to ensure we aren't using stale data.
+    rm -f "$ocr_output" "$md_output" "$temp_prep_pdf"
 
+    # --- Step 0: Pre-process (Sanitization) ---
     local needs_flattening="false"
 
     if [[ "$extension" =~ ^(jpg|jpeg|png|tif|tiff)$ ]]; then
@@ -89,7 +92,7 @@ process_file() {
         echo "  [0/2] Flattening image (ImageMagick)..."
     elif [[ "$extension" == "pdf" && "$force_mode" == "true" ]]; then
         needs_flattening="true"
-        echo "  [0/2] Rasterizing PDF to clean images (ImageMagick)..."
+        echo "  [0/2] Rasterizing PDF to clean images at ${FORCE_DPI} DPI..."
     fi
 
     if [[ "$needs_flattening" == "true" ]]; then
@@ -99,11 +102,9 @@ process_file() {
             return
         fi
 
-        temp_prep_pdf="${OCR_DIR}/${base_name}_temp_prep.pdf"
-
-        # Convert Input -> PDF (300 DPI, White Background, No Alpha)
-        # This works for both Images and PDFs.
-        if magick "$input_file" -density 300 -background white -alpha remove -alpha off "$temp_prep_pdf"; then
+        # Convert Input -> PDF
+        # CRITICAL FIX: -density must come BEFORE the input file to actually read at high res.
+        if magick -density "$FORCE_DPI" "$input_file" -background white -alpha remove -alpha off "$temp_prep_pdf"; then
             # Update variable to point to the temp PDF instead of original
             file_to_ocr="$temp_prep_pdf"
         else
@@ -115,23 +116,19 @@ process_file() {
     # --- Step 1: OCR (ocrmypdf) ---
     echo "  [1/2] OCR to PDF..."
 
-    # If we are in force mode (or processed an image), 'file_to_ocr' is now a
-    # fresh image-only PDF, so we can run standard OCR on it.
-
     if ocrmypdf -l "$lang" --deskew --skip-text --invalidate-digital-signatures "$file_to_ocr" "$ocr_output" 2>/dev/null; then
         : # Success
     else
         echo "        (Retrying with force-ocr...)"
-        # Fallback
         if ! ocrmypdf -l "$lang" --force-ocr --invalidate-digital-signatures "$file_to_ocr" "$ocr_output" 2>/dev/null; then
             echo "${RED}  [FAILED] OCR step failed for $input_file${NC}"
-            [[ -n "$temp_prep_pdf" && -f "$temp_prep_pdf" ]] && rm "$temp_prep_pdf"
+            rm -f "$temp_prep_pdf"
             return
         fi
     fi
 
     # Cleanup temp file
-    [[ -n "$temp_prep_pdf" && -f "$temp_prep_pdf" ]] && rm "$temp_prep_pdf"
+    rm -f "$temp_prep_pdf"
 
     # --- Step 2: MarkItDown ---
     echo "  [2/2] Converting to Markdown..."
