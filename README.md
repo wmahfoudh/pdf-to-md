@@ -4,7 +4,7 @@ This script automates the pipeline of converting PDF documents and images into c
 
 It handles the entire extraction process: correcting image defects, performing OCR (Optical Character Recognition) using Tesseract, and converting the layout into structured Markdown. It includes specific robust handling for corrupt text layers and digital signatures that often break standard extractors.
 
-**Please note** that the end result depends on the input file, the OCR process and the capabilities of `markitdown`, so expect the results from some complicated files to be "messy". The intent from this project is to extract the text itself *in batch*, which is perfectly achieved, markdown formatting is a bonus.
+**Note:** The end result depends on the input file, the OCR process and the capabilities of `markitdown`, so expect the results from some complicated files to be "messy". The intent from this project is to extract the text itself *in batch*, which is perfectly achieved, markdown formatting is a bonus.
 
 ## Features
 
@@ -13,6 +13,8 @@ It handles the entire extraction process: correcting image defects, performing O
 *   **Image Support:** Automatically converts JPG, PNG, and TIFF files to PDF, fixing common issues like missing DPI metadata or alpha channels (transparency) using ImageMagick.
 *   **Multi-Language Support:** Easy syntax to specify [multiple languages](https://tesseract-ocr.github.io/tessdoc/Data-Files-in-different-versions.html) for OCR (e.g., English + Simplified Chinese).
 *   **"Nuclear" Force Mode:** A specific flag (`-f`) to handle files with corrupt text encoding (CID errors) or digital signatures by rasterizing the document before processing.
+
+**Note:** The script will first delete the destination files if they exist. This was added to fix the runtime errors noticed on WSL where in some cases overriting was not permitted.
 
 ## Prerequisites
 
