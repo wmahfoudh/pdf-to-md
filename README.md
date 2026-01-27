@@ -4,7 +4,7 @@ This script automates the pipeline of converting PDF documents and images into c
 
 It handles the entire extraction process: correcting image defects, performing OCR (Optical Character Recognition) using Tesseract, and converting the layout into structured Markdown. It includes specific robust handling for corrupt text layers and digital signatures that often break standard extractors.
 
-**Please note** that the end result depends on the input file, the OCR process and the capabilities of `markitdown`, so expect the results from some complicated files to be "messy". The intent from this project is to extract the text itself, which is perfectly achieved, markdown formatting is a bonus.
+**Please note** that the end result depends on the input file, the OCR process and the capabilities of `markitdown`, so expect the results from some complicated files to be "messy". The intent from this project is to extract the text itself *in batch*, which is perfectly achieved, markdown formatting is a bonus.
 
 ## Features
 
