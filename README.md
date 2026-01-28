@@ -6,6 +6,11 @@ It handles the entire extraction process: correcting image defects, performing O
 
 **Note:** The end result depends on the input file, the OCR process and the capabilities of `markitdown`, so expect the results from some complicated files to be "messy". The intent from this project is to extract the text itself *in batch*, which is perfectly achieved, markdown formatting is a bonus.
 
+## Versions
+*   **pdf-to-md** is the original batch processing utility, will process all files in the current folder (though it can target indivudual files).
+*   **one-pdf-to-md** a version for silent conversion of one file, using the "Nuclear" mode, useful in cloud functions where interactivity is not desired.
+*   **one-pdf-to-md-stdout** same as previous, but output is redirected to STDOUT rather than saved in a file, usefult for piping the results.
+
 ## Features
 
 *   **Batch Processing:** Run without arguments to process every PDF and image in the current directory.
